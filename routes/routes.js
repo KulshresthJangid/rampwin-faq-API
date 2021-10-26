@@ -35,9 +35,14 @@ router.post('/newFAQ', async (req, res) => {
 router.patch('/editFAQ/:id',async (req, res) => {
     try {
         FAQ.findOne({ _id: req.params.id }).then((result) => {
+
+            if (!result) {
+                res.send("No such FAQ.")
+            }
+
             result.question = req.body.question
             result.answer = req.body.question
-            result.editedOn = Date.now()
+            result.editedOn.push(Date.now())
             
             result.save()
             res.status(200).send(result)
@@ -45,6 +50,18 @@ router.patch('/editFAQ/:id',async (req, res) => {
     } catch (e) {
         res.status(400).send(e.message)
     }
+})
+
+router.delete('/delete/:id',async (req, res) => {
+    
+    try {
+        await FAQ.findByIdAndDelete({ _id: req.params.id }).then((result) => {
+            res.send("The FAQ is deleted")
+        })
+    } catch (e) {
+        res.status(400).send(e.message)
+    }
+    
 })
 
 module.exports = router

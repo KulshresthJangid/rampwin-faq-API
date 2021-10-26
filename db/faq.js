@@ -3,16 +3,14 @@ const mongoose = require('mongoose')
 const faqSchema = mongoose.Schema({
     question: {
         type: String,
-        required: true
+        required: [true, 'Question is required.']
     }, answer: {
         type: String,
-        required: true
+        required: [true, 'Answer is required.']
     }, askedOn: {
         type: Date,
         default: Date.now
-    }, editedOn: {
-        type: Date
-    }
+    }, editedOn: [Date]
 })
 
 module.exports = mongoose.model('FAQ', faqSchema)
